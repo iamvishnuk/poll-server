@@ -6,6 +6,7 @@ from typing import List, Optional, TypeVar, Generic, Union, Literal, Any
 import uvicorn
 import json
 import logging
+import os
 from dotenv import load_dotenv
 from .database import redis_conn
 from .routers import poll
@@ -28,9 +29,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
+ALLOWED_ORIGINS = os.getenv('FRONTEND_URL', '').split(',')
+
 app.add_middleware(
     CORSMiddleware, 
-    allow_origins=["*"], 
+    allow_origins=ALLOWED_ORIGINS, 
     allow_credentials=True, 
     allow_methods=["*"], 
     allow_headers=["*"]
